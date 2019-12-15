@@ -37,10 +37,9 @@ def show_tracks(tracks):
 
 playlist_id = 'https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX?si=QfnqrFj4SoC6B5rZDdF07A'
 
-#tracks = fetch_tracks_from_playlist(sp, username, playlist_id)
-#show_tracks(tracks)
+tracks = fetch_tracks_from_playlist(sp, username, playlist_id)
+show_tracks(tracks)
+pprint.pprint(tracks[0])
 
-track = 'spotify:track:6N10tJfiQqm4wn6KM70aoT'
-
-info = features.get_audio_features(sp, track)
-pprint.pprint(info)
+#info = features.get_audio_features(sp, track)
+#pprint.pprint(info)
