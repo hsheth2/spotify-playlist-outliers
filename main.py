@@ -4,7 +4,10 @@ import spotipy.util
 import dotenv
 import pprint
 import numpy as np
+
 from pyod.models.knn import KNN
+from pyod.models.lscp import LSCP
+from pyod.models.pca import PCA
 
 import data
 
@@ -66,7 +69,9 @@ def track_characteristics_array(sp: spotipy.client.Spotify, track_uri: str):
     values = [track[feature] for feature in characteristics]
     return values
 
-playlist_id = "https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX"
+# playlist_id = "https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX"  # Harshal playlist
+# playlist_id = "https://open.spotify.com/playlist/4yyfdbRQpx44MQwNPgBOek"  # No words playlist
+playlist_id = "https://open.spotify.com/playlist/4DVTXRD4BzbjPSfbw1n74E"  # Questionable playlist
 uris = data.get_playlist(sp, username, playlist_id)
 
 # uri = 'spotify:track:2cGxRwrMyEAp8dEbuZaVv6'
@@ -75,7 +80,7 @@ uris = data.get_playlist(sp, username, playlist_id)
 
 X = np.array([track_characteristics_array(sp, track_uri) for track_uri in uris])
 
-clf = KNN()
+clf = PCA()
 clf.fit(X)
 
 ranks = sorted(zip(clf.decision_scores_, uris), reverse=True)
@@ -85,5 +90,5 @@ for score, track_uri in ranks:
     track = data.get_track_info(sp, track_uri)
     track_info = track_characteristics_array(sp, track_uri)
     prob = clf.predict_proba(np.array([track_info]), method="unify")[:,1][0]
-    print("   %f %32.32s %s" % (prob, track["artists"][0]["name"], track["name"]))
+    print("{: 12.3f} {: 6.3f} {:>32s} {:s}".format(score, prob, track["artists"][0]["name"], track["name"]))
 
