@@ -20,8 +20,7 @@ def get_playlist(sp, username, playlist_id):
     tracks = _fetch_tracks_from_playlist(sp, username, playlist_id)
 
     uris = []
-    for i, track in enumerate(tracks):
-        print("   %d %32.32s %s" % (i, track["artists"][0]["name"], track["name"]))
+    for track in tracks:
         track_uri = track["uri"]
         uris.append(track_uri)
 

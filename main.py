@@ -4,7 +4,7 @@ import spotipy.util
 import dotenv
 import pprint
 
-import features
+import data
 
 dotenv.load_dotenv()
 
@@ -22,7 +22,8 @@ sp = spotipy.Spotify(auth=token)
 
 playlist_id = "https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX"
 
-uris = features.get_playlist(sp, username, playlist_id)
+uris = data.get_playlist(sp, username, playlist_id)
 
-# info = features.get_audio_features(sp, track)
+# print("   %d %32.32s %s" % (i, track["artists"][0]["name"], track["name"]))
+# info = data.get_audio_features(sp, track)
 # pprint.pprint(info)
