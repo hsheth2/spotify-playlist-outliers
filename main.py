@@ -69,8 +69,6 @@ def track_characteristics_array(sp: spotipy.client.Spotify, track_uri: str):
 playlist_id = "https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX"
 uris = data.get_playlist(sp, username, playlist_id)
 
-# print("   %d %32.32s %s" % (i, track["artists"][0]["name"], track["name"]))
-
 # uri = 'spotify:track:2cGxRwrMyEAp8dEbuZaVv6'
 # info = data.get_audio_features(sp, uri)
 # values = track_characteristics_array(sp, uri)
@@ -79,3 +77,13 @@ X = np.array([track_characteristics_array(sp, track_uri) for track_uri in uris])
 
 clf = KNN()
 clf.fit(X)
+
+ranks = sorted(zip(clf.decision_scores_, uris), reverse=True)
+for score, track_uri in ranks:
+    if score < clf.threshold_:
+        break
+    track = data.get_track_info(sp, track_uri)
+    track_info = track_characteristics_array(sp, track_uri)
+    prob = clf.predict_proba(np.array([track_info]), method="unify")[:,1][0]
+    print("   %f %32.32s %s" % (prob, track["artists"][0]["name"], track["name"]))
+
