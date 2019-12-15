@@ -20,31 +20,9 @@ if not token:
 sp = spotipy.Spotify(auth=token)
 
 
-def fetch_tracks_from_playlist(sp, username, playlist_id):
-    all_tracks = []
-    results = sp.user_playlist(username, playlist_id, fields="tracks,next")
+playlist_id = "https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX"
 
-    tracks = results["tracks"]
-    all_tracks += tracks["items"]
-    while tracks["next"]:
-        tracks = sp.next(tracks)
-        all_tracks += tracks["items"]
-
-    return [item["track"] for item in all_tracks]
-
-
-def show_tracks(tracks):
-    for i, track in enumerate(tracks):
-        print("   %d %32.32s %s" % (i, track["artists"][0]["name"], track["name"]))
-
-
-playlist_id = (
-    "https://open.spotify.com/playlist/3z91HHZMlFJsUZquZBbQnX"
-)
-
-tracks = fetch_tracks_from_playlist(sp, username, playlist_id)
-show_tracks(tracks)
-pprint.pprint(tracks[0])
+uris = features.get_playlist(sp, username, playlist_id)
 
 # info = features.get_audio_features(sp, track)
 # pprint.pprint(info)
